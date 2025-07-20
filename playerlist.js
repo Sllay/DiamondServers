@@ -1,19 +1,20 @@
 // playerlist.js
-// banco simples em memória + códigos de verificação
-const bcrypt = require("bcrypt");
-const codes = {};   // email -> code
-const users = {};   // email -> { email, hash }
+// Versão segura usando bcryptjs (sem dependências nativas)
+
+const bcrypt = require("bcryptjs"); // hashing puro em JS
+const codes = {};   // Map email -> código
+const users = {};   // Map email -> { email, hash }
 
 module.exports = {
   async register(email, password) {
     if (users[email]) return false;
-    const hash = await bcrypt.hash(password, 10);
+    const saltRounds = 10;
+    const hash = await bcrypt.hash(password, saltRounds);
     users[email] = { email, hash };
-    // gerar código e (aqui) enviar por e-mail via API externa
-    const code = Math.floor(100000 + Math.random()*900000).toString();
+    const code = Math.floor(100000 + Math.random() * 900000).toString();
     codes[email] = code;
     console.log(`Código para ${email}: ${code}`);
-    // TODO: chamar API de e-mail para envio real
+    // TODO: integrar envio de e-mail usando API tipo SendGrid/Mailgun
     return true;
   },
 
@@ -33,6 +34,6 @@ module.exports = {
   },
 
   remove(id) {
-    // nada a fazer aqui por enquanto
+    // Pode implementar limpeza se necessário
   }
 };
