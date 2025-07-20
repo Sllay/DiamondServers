@@ -1,7 +1,7 @@
 // playerlist.js
 // Versão segura usando bcryptjs (sem dependências nativas)
 
-const bcrypt = require("bcryptjs"); // hashing puro em JS
+//const bcrypt = require("bcryptjs"); // hashing puro em JS
 const codes = {};   // Map email -> código
 const users = {};   // Map email -> { email, hash }
 
